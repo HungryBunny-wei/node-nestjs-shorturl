@@ -20,15 +20,16 @@ export class ShortUrlController {
       res.status(400).json({ error: { message: '"link" not null' } });
       return;
     }
-    if (!validUrl.isUri(body.link)) {
+    const link = encodeURI(body.link);
+    if (!validUrl.isUri(link)) {
       res.status(400).json({ error: { message: '"link" It\'s not a legal address'} });
     }
-    const shortUrlEntity = await this.shortUrlRepository.findOne({ link: body.link });
+    const shortUrlEntity = await this.shortUrlRepository.findOne({ link });
     if (shortUrlEntity) {
       res.status(200).json({ shortLink: `${Config.shortUrlPrefix}/${shortUrlEntity.urlCode}` });
     } else {
       const urlCode = shortid.generate();
-      await this.shortUrlRepository.save({ link: body.link, urlCode });
+      await this.shortUrlRepository.save({ link, urlCode });
       res.status(200).json({ shortLink: `${Config.shortUrlPrefix}/${urlCode}` });
     }
 
@@ -36,10 +37,9 @@ export class ShortUrlController {
 
   @Get('s/:urlCode')
   async redirect(@Param('urlCode') urlCode: string, @Res() res: Response) {
-    console.log('urlCode', urlCode);
     const shortUrlEntity = await this.shortUrlRepository.findOne({ urlCode });
     if (shortUrlEntity) {
-      res.redirect(shortUrlEntity.link);
+      res.redirect(decodeURI(shortUrlEntity.link));
     } else {
       res.send('404');
     }
