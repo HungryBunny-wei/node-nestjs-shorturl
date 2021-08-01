@@ -58,16 +58,44 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Support
+## Publish / 发布
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+克隆本项目
+```shell
+git clone https://github.com/rabbitkiller-dev/node-nestjs-shorturl
+```
+安装依赖(node_modules)
+```shell
+npm install
+```
 
-## Stay in touch
+### 通过docker-compose启动
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+1. 使用mysql数据库(按需)
+修改ormconfig.json
+```json
+{
+  "type": "mysql",
+  "host": "ip::::",
+  "port": 3306,
+  "username": "username",
+  "password": "password",
+  "database": "database",
+  "synchronize": true,
+  "logging": true,
+  "entities": ["dist/**/*.entity{.ts,.js}"]
+}
+```
 
-## License
-
-Nest is [MIT licensed](LICENSE).
+2. 修改docker-compose.yml
+    - 修改ports(按需)
+    - 修改重定向地址前缀(SHORT_URL_PREFIX)
+```shell
+    environment:
+      - SHORT_URL_PREFIX=https://xxxxxx.dev/s
+```
+启动
+```shell
+docker-compose up -d
+```
+访问: http://localhost:9001

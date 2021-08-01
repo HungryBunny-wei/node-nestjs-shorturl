@@ -5,7 +5,7 @@ import { ShortUrlEntity } from '../entities/short-url.entity';
 import { Repository } from 'typeorm';
 import * as shortid from 'shortid';
 import * as validUrl from 'valid-url';
-import { Config } from '../../config';
+import { Config } from '../config';
 
 @Controller('/')
 export class ShortUrlController {

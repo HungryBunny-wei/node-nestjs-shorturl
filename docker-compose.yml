@@ -1,0 +1,22 @@
+version: '3'
+services:
+  db:
+    ports:
+      - "9001:3000"
+    restart: always
+    privileged: 'true'
+    volumes:
+      - .:/workspace/node-nestjs-shorturl
+    environment:
+      - SHORT_URL_PREFIX=https://xxxxxx.dev/s
+    working_dir: /workspace/node-nestjs-shorturl
+    command:
+      - sh
+      - -c
+      - |
+          ls -l
+          npm run build
+          node dist/main.js
+    image: node:14
+volumes:
+  logvolume01: {}
